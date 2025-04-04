@@ -10,37 +10,45 @@ if [ ! -f "$BASH_PROFILE" ]; then
     echo "Created $BASH_PROFILE"
 fi
 
-# Copy .default_bash_profile to home directory if it doesn't exist
-if [ ! -f "$HOME/$DEFAULT_PROFILE" ]; then
-    cp "$DEFAULT_PROFILE" "$HOME/$DEFAULT_PROFILE"
-    echo "Copied $DEFAULT_PROFILE to $HOME/"
-else
-    echo "$HOME/$DEFAULT_PROFILE already exists"
-fi
+# Define an array of files to symlink
+files_to_link=(
+  "$DEFAULT_PROFILE" 
+  ".screenrc"
+  ".git-completion.bash"
+  ".git-prompt.sh"
+  ".prompt-colors.sh"
+  # Add more files as needed
+)
 
-# Copy .git-completion.bash to home directory if it doesn't exist
-if [ ! -f "$HOME/.git-completion.bash" ]; then
-    cp ".git-completion.bash" "$HOME/.git-completion.bash"
-    echo "Copied .git-completion.bash to $HOME/"
-else
-    echo "$HOME/.git-completion.sh already exists"
-fi
+# Get the absolute path of the dotfiles directory
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Copy .prompt-colors.sh to home directory if it doesn't exist
-if [ ! -f "$HOME/.prompt-colors.sh" ]; then
-    cp ".prompt-colors.sh" "$HOME/.prompt-colors.sh"
-    echo "Copied .prompt-colors.sh to $HOME/"
-else
-    echo "$HOME/.prompt-colors.sh already exists"
-fi
+# Create backup directory with timestamp
+BACKUP_DIR="$HOME/.dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$BACKUP_DIR"
 
-# Copy .git-prompt.sh to home directory if it doesn't exist
-if [ ! -f "$HOME/.git-prompt.sh" ]; then
-    cp ".git-prompt.sh" "$HOME/.git-promit.sh"
-    echo "Copied .git-prompt.sh to $HOME/"
-else
-    echo "$HOME/.git-prompt.sh already exists"
-fi
+# Loop through the files and symlink them to home directory
+for file in "${files_to_link[@]}"; do
+  if [ -f "$DOTFILES_DIR/$file" ]; then
+    if [ ! -e "$HOME/$file" ]; then
+      # File doesn't exist - create symlink
+      ln -s "$DOTFILES_DIR/$file" "$HOME/$file"
+      echo "Symlinked $file to $HOME/"
+    elif [ -L "$HOME/$file" ]; then
+      # File is already a symlink
+      echo "$HOME/$file is already a symlink"
+    else
+      # File exists but is not a symlink
+      echo "Backing up existing $HOME/$file to $BACKUP_DIR/"
+      cp "$HOME/$file" "$BACKUP_DIR/"
+      rm "$HOME/$file"
+      ln -s "$DOTFILES_DIR/$file" "$HOME/$file"
+      echo "Replaced $HOME/$file with symlink"
+    fi
+  else
+    echo "Warning: $file not found in $DOTFILES_DIR"
+  fi
+done
 
 # Check if .bash_profile already sources .default_bash_profile
 if ! grep -q "source .*${DEFAULT_PROFILE}" "$BASH_PROFILE"; then
