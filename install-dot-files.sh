@@ -17,6 +17,7 @@ files_to_link=(
   ".git-completion.bash"
   ".git-prompt.sh"
   ".prompt-colors.sh"
+  ".config/nvim/init.vim"
   # Add more files as needed
 )
 
