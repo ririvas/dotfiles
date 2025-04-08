@@ -1,0 +1,11 @@
+# start with visual bell as default
+vbell on
+vbell_msg "bell on %t (%n)"
+
+# look and feel
+caption always "%{= bb}%{+b w}%n %t %h %=%l %H %c"
+hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
+
+
+shelltitle "shell"
+shell -$SHELL

@@ -1,0 +1,34 @@
+
+To reinstall
+# sudo apt install \$(grep -v '^#' .apt-packages | tr '\n' ' ')
+
+apt-transport-https
+build-essential
+dash
+dnsutils
+dotnet-sdk-6.0
+dotnet-sdk-8.0
+dotnet-sdk-9.0
+gh
+glow
+gnupg
+gpg
+grep
+gzip
+iptables
+iputils-ping
+keyutils
+msodbcsql18
+mssql-tools
+net-tools
+openssh-client
+openssh-server
+packages-microsoft-prod
+powershell
+python3-pip
+ripgrep
+screen
+curl
+wget
+unixodbc-dev
+software-properties-common
