@@ -25,9 +25,13 @@ Plug 'Shougo/vimproc.vim'
 Plug 'prabirshrestha/asyncomplete.vim'
 
 " Debugging
-Plug 'puremourning/vimspector'
+"Plug 'puremourning/vimspector'
 Plug 'mfussenegger/nvim-dap'
+Plug 'nvim-neotest/nvim-nio'
+Plug 'rcarriga/nvim-dap-ui'
 Plug 'mfussenegger/nvim-dap-python'
+"Plug 'NicholasMata/nvim-dap-cs'
+
 
 " SQL client
 Plug 'tpope/vim-dadbod'
@@ -103,6 +107,14 @@ lua << EOF
     vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
     vim.keymap.set('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
 
+    -- nvim-dap bindings
+    vim.keymap.set('n','<F5>', "<cmd>lua require('dap').continue()<CR>")
+    vim.keymap.set('n','<F6>', "<cmd>lua require('dap').disconnect()<CR>")
+    vim.keymap.set('n','<F10>', "<cmd>lua require('dap').step_over()<CR>")
+    vim.keymap.set('n', '<F11>', "<cmd>lua require('dap').step_into()<CR>")
+    vim.keymap.set('n', '<F12>', "<cmd>lua require('dap').step_out()<CR>")
+    vim.keymap.set('n', '<F9>', "<cmd>lua require('dap').toggle_breakpoint()<CR>")
+
     local cmp = require'cmp'
 
     cmp.setup({
@@ -161,7 +173,83 @@ lua << EOF
         capabilities = capabilities,
     }
     require 'typescript-tools'.setup{}
+    local dap = require('dap')
+    
+    dap.adapters.coreclr = {
+        type = 'executable',
+        command = '/usr/local/bin/netcoredbg/netcoredbg',
+        args = {'--interpreter=vscode'}
+    }
+    vim.g.dotnet_build_project = function()
+        local default_path = vim.fn.getcwd() .. '/'
+        if vim.g['dotnet_last_proj_path'] ~= nil then
+            default_path = vim.g['dotnet_last_proj_path']
+        end
+        local path = vim.fn.input('Path to your *proj file', default_path, 'file')
+        vim.g['dotnet_last_proj_path'] = path
+        local cmd = 'dotnet build -c Debug ' .. path .. ' > /dev/null'
+        print('')
+        print('Cmd to execute: ' .. cmd)
+        local f = os.execute(cmd)
+        if f == 0 then
+            print('\nBuild: ✔️ ')
+        else
+            print('\nBuild: ❌ (code: ' .. f .. ')')
+        end
+    end
+
+    vim.g.dotnet_get_dll_path = function()
+        local request = function()
+            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+        end
+
+        if vim.g['dotnet_last_dll_path'] == nil then
+            vim.g['dotnet_last_dll_path'] = request()
+        else
+            if vim.fn.confirm('Do you want to change the path to dll?\n' .. vim.g['dotnet_last_dll_path'], '&yes\n&no', 2) == 1 then
+                vim.g['dotnet_last_dll_path'] = request()
+            end
+        end
+
+        return vim.g['dotnet_last_dll_path']
+    end
+
+    local config = {
+      {
+        type = "coreclr",
+        name = "launch - netcoredbg",
+        request = "launch",
+        program = function()
+            if vim.fn.confirm('Should I recompile first?', '&yes\n&no', 2) == 1 then
+                vim.g.dotnet_build_project()
+            end
+            return vim.g.dotnet_get_dll_path()
+        end,
+      },
+    }
+
+    dap.configurations.cs = config
+    dap.configurations.fsharp = config 
     require('dap-python').setup('python3')
+    local dapui = require('dapui')
+    dapui.setup()
+    dap.listeners.before.attach.dapui_config = function()
+      dapui.open()
+    end
+    dap.listeners.before.launch.dapui_config = function()
+      dapui.open()
+    end
+    dap.listeners.before.event_terminated.dapui_config = function()
+      dapui.close()
+    end
+    dap.listeners.before.event_exited.dapui_config = function()
+      dapui.close()
+    end
+
+
+
+
+
     require'CopilotChat'.setup{
         model='claude-3.7-sonnet'
     }
