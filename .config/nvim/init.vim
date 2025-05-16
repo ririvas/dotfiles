@@ -54,6 +54,9 @@ Plug 'CopilotC-Nvim/CopilotChat.nvim'
 " Colorscheme
 Plug 'catppuccin/nvim'
 Plug 'nvim-tree/nvim-web-devicons'
+Plug 'ellisonleao/gruvbox.nvim'
+Plug 'folke/tokyonight.nvim'
+Plug 'Mofiqul/vscode.nvim'
 
 " Statusline
 Plug 'itchyny/lightline.vim'
@@ -74,23 +77,35 @@ let g:db_ui_execute_on_save = 0
 let g:copilot_enabled = 0
 let g:OmniSharp_server_use_net6 = 1
 let g:ale_linters = {
-\ 'cs': ['OmniSharp']
+\ 'cs': ['OmniSharp'],
+\ 'cshtml': []
+\}
+let g:ale_pattern_options = {
+\   '.*\.cshtml$': {'ale_enabled': 0},
 \}
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:mkdp_echo_preview_url = 1
 
 lua << EOF
+    vim.opt.relativenumber = true
     -- ripgrep
     vim.opt.grepprg = "rg --vimgrep"
     vim.opt.grepformat = "%f:%l:%c:%m"
     -- theme
-    vim.cmd('colorscheme catppuccin-mocha')
+    vim.cmd('colorscheme vscode')
+    vim.api.nvim_set_hl(0, "csXmlTag", { fg = "#3F6641", italic = true }) -- C# XML doc comments
+    vim.api.nvim_set_hl(0, "xmlTag", { fg = "#3F6641", italic = true })
+
+
     -- diagnostics
     vim.keymap.set('n','<space>e','<cmd>lua vim.diagnostic.open_float()<CR>')
     -- set leader key to space
     vim.g.mapleader = ' '
     vim.g.maplocalleader = ' '
     vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>')
+
+    --new tab 
+    vim.keymap.set('n', 't','<cmd>tabnew<CR>')
     -- LSP Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
@@ -98,14 +113,11 @@ lua << EOF
     vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
     vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
     vim.keymap.set('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
-    vim.keymap.set('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
-    vim.keymap.set('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
-    vim.keymap.set('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
     vim.keymap.set('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
     vim.keymap.set('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
     vim.keymap.set('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
     vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
-    vim.keymap.set('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+    vim.keymap.set('n', '<space>fr', '<cmd>lua vim.lsp.buf.formatting()<CR>')
 
     -- nvim-dap bindings
     vim.keymap.set('n','<F5>', "<cmd>lua require('dap').continue()<CR>")
@@ -114,6 +126,47 @@ lua << EOF
     vim.keymap.set('n', '<F11>', "<cmd>lua require('dap').step_into()<CR>")
     vim.keymap.set('n', '<F12>', "<cmd>lua require('dap').step_out()<CR>")
     vim.keymap.set('n', '<F9>', "<cmd>lua require('dap').toggle_breakpoint()<CR>")
+    -- OmniSharp commands
+    vim.api.nvim_create_augroup("omnisharp_commands", { clear = true })
+
+    -- Show type information automatically when the cursor stops moving
+    vim.api.nvim_create_autocmd("CursorHold", {
+        pattern = "*.cs",
+        callback = function()
+            vim.cmd("OmniSharpTypeLookup")
+        end,
+        group = "omnisharp_commands"
+    })
+
+    -- Set up FileType specific mappings for C# files
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = "cs",
+        callback = function()
+            -- The following commands are contextual, based on the cursor position
+            vim.keymap.set("n", "gd", "<Plug>(omnisharp_go_to_definition)", { silent = true, buffer = true })
+            vim.keymap.set("n", "gr", "<Plug>(omnisharp_find_usages)", { silent = true, buffer = true })
+            vim.keymap.set("n", "gi", "<Plug>(omnisharp_find_implementations)", { silent = true, buffer = true })
+            vim.keymap.set("n", "<Leader>D", "<Plug>(omnisharp_preview_definition)", { silent = true, buffer = true })
+            vim.keymap.set("n", "<Leader>I", "<Plug>(omnisharp_preview_implementations)", { silent = true, buffer = true })
+            vim.keymap.set("n", "<Leader>T", "<Plug>(omnisharp_type_lookup)", { silent = true, buffer = true })
+            vim.keymap.set("n", "<Leader>d", "<Plug>(omnisharp_documentation)", { silent = true, buffer = true })
+            vim.keymap.set("n", "<Leader>S", "<Plug>(omnisharp_find_symbol)", { silent = true, buffer = true })
+            vim.keymap.set("n", "<C-K>", "<Plug>(omnisharp_signature_help)", { silent = true, buffer = true })
+            vim.keymap.set("i", "<C-K>", "<Plug>(omnisharp_signature_help)", { silent = true, buffer = true })
+            -- Navigate up and down by method/property/field
+            vim.keymap.set("n", "[[", "<Plug>(omnisharp_navigate_up)", { silent = true, buffer = true })
+            vim.keymap.set("n", "]]", "<Plug>(omnisharp_navigate_down)", { silent = true, buffer = true })
+            -- Rename
+            vim.keymap.set("n", "<Leader>osnm", "<Plug>(omnisharp_rename)", { silent = true, buffer = true })
+        end,
+        group = "omnisharp_commands"
+    })
+
+    local builtin = require('telescope.builtin')
+    vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+    vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+    vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+    vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 
     local cmp = require'cmp'
 
@@ -165,8 +218,9 @@ lua << EOF
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
     require('mason').setup()
-    local mason_lspconfig = require 'mason-lspconfig'
+    local mason_lspconfig = require('mason-lspconfig')
     mason_lspconfig.setup {
+        automatic_enable = false,
         ensure_installed = { "pyright" }
     }
     require("lspconfig").pyright.setup {
@@ -245,10 +299,6 @@ lua << EOF
     dap.listeners.before.event_exited.dapui_config = function()
       dapui.close()
     end
-
-
-
-
 
     require'CopilotChat'.setup{
         model='claude-3.7-sonnet'
