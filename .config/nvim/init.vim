@@ -1,10 +1,19 @@
 call plug#begin()
+
+Plug 'nvim-tree/nvim-web-devicons'
+
 " LSP
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 
+" Markview 
+Plug 'OXY2DEV/markview.nvim'
+
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+
+" Code outline
+Plug 'stevearc/aerial.nvim'
 
 " Completions
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -32,7 +41,6 @@ Plug 'rcarriga/nvim-dap-ui'
 Plug 'mfussenegger/nvim-dap-python'
 "Plug 'NicholasMata/nvim-dap-cs'
 
-
 " SQL client
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
@@ -47,13 +55,13 @@ Plug 'BurntSushi/ripgrep'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'projekt0n/github-nvim-theme'
 
-"Copilot
+" AI
 Plug 'github/copilot.vim'
 Plug 'CopilotC-Nvim/CopilotChat.nvim'
+Plug 'olimorris/codecompanion.nvim'
 
 " Colorscheme
 Plug 'catppuccin/nvim'
-Plug 'nvim-tree/nvim-web-devicons'
 Plug 'ellisonleao/gruvbox.nvim'
 Plug 'folke/tokyonight.nvim'
 Plug 'Mofiqul/vscode.nvim'
@@ -86,7 +94,12 @@ let g:ale_pattern_options = {
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:mkdp_echo_preview_url = 1
 
+let g:lightline = {
+    \ 'colorscheme': 'one'
+    \}
+
 lua << EOF
+    vim.o.background = 'light'
     vim.opt.relativenumber = true
     -- ripgrep
     vim.opt.grepprg = "rg --vimgrep"
@@ -161,6 +174,8 @@ lua << EOF
         end,
         group = "omnisharp_commands"
     })
+
+    require("nvim-web-devicons").setup({default = true})
 
     local builtin = require('telescope.builtin')
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
@@ -303,6 +318,15 @@ lua << EOF
     require'CopilotChat'.setup{
         model='claude-3.7-sonnet'
     }
+    require("codecompanion").setup()
+    require("aerial").setup()
+    require("markview").setup({
+        preview = {
+            filetypes = { "md", "markdown", "codecompanion", "copilot-chat" },
+            ignore_buftypes = {},
+            icon_provide = "devicons"
+        }
+    })
 EOF
 
 
