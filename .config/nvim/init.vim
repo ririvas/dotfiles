@@ -94,7 +94,12 @@ let g:ale_pattern_options = {
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:mkdp_echo_preview_url = 1
 
+let g:lightline = {
+    \ 'colorscheme': 'one'
+    \}
+
 lua << EOF
+    vim.o.background = 'light'
     vim.opt.relativenumber = true
     -- ripgrep
     vim.opt.grepprg = "rg --vimgrep"
