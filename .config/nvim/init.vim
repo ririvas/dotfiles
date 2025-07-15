@@ -1,6 +1,7 @@
 call plug#begin()
 
 Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvim-tree/nvim-tree.lua'
 
 " LSP
 Plug 'williamboman/mason.nvim'
@@ -46,14 +47,19 @@ Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 
+Plug 'folke/which-key.nvim'
+Plug 'Kurren123/mssql.nvim'
+
 "TS support
 Plug 'nvim-lua/plenary.nvim'
 Plug 'pmizio/typescript-tools.nvim'
 
 " Telescope
+Plug 'tpope/vim-fugitive'
 Plug 'BurntSushi/ripgrep'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'projekt0n/github-nvim-theme'
+Plug 'isak102/telescope-git-file-history.nvim'
 
 " AI
 Plug 'github/copilot.vim'
@@ -109,7 +115,12 @@ lua << EOF
     vim.api.nvim_set_hl(0, "csXmlTag", { fg = "#3F6641", italic = true }) -- C# XML doc comments
     vim.api.nvim_set_hl(0, "xmlTag", { fg = "#3F6641", italic = true })
 
+    -- disable netrw at the very start of your init.lua
+    vim.g.loaded_netrw = 1
+    vim.g.loaded_netrwPlugin = 1
 
+    -- optionally enable 24-bit colour
+    vim.opt.termguicolors = true
     -- diagnostics
     vim.keymap.set('n','<space>e','<cmd>lua vim.diagnostic.open_float()<CR>')
     -- set leader key to space
@@ -176,6 +187,7 @@ lua << EOF
     })
 
     require("nvim-web-devicons").setup({default = true})
+    require("nvim-tree").setup()
 
     local builtin = require('telescope.builtin')
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
@@ -315,6 +327,11 @@ lua << EOF
       dapui.close()
     end
 
+    require("mssql").setup({
+        keymap_prefix = "<leader>m",
+        max_rows = 50,
+        max_column_width = 25
+    })
     require'CopilotChat'.setup{
         model='claude-3.7-sonnet'
     }
