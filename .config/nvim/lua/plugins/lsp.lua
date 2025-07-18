@@ -14,7 +14,7 @@ return {
         dependencies = { 'williamboman/mason.nvim' },
         config = function()
             require('mason-lspconfig').setup({
-                automatic_enable = false,
+                automatic_enable = false, -- setting this to true messes with roslyn?
                 ensure_installed = { "pyright", "html", "lua_ls", "ts_ls" }
             })
         end,
@@ -32,6 +32,7 @@ return {
                 -- LSP capabilities for completions
                 local capabilities = vim.lsp.protocol.make_client_capabilities()
                 capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
+                config.capabilities = capabilities
                 lspConfig[server].setup(config)
             end
             vim.lsp.config("roslyn", {
@@ -44,6 +45,7 @@ return {
                 },
                 -- Add other options here
             })
+            vim.lsp.enable("pyright")
         end,
     },
     -- TypeScript support
