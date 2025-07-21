@@ -4,6 +4,7 @@ return {
         ft = "cs",
         opts = {
             filewatching = "roslyn",
+            keymap_prefix = "<leader>r",
             config = {
                 settings = {
                     ["csharp|inlay_hints"] = {

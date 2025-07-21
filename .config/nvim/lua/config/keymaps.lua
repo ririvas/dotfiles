@@ -50,12 +50,3 @@ if telescope_exists() then
   vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 end
 
--- MSSQL keymaps (from your original config)
-local function mssql_exists()
-  local ok, _ = pcall(require, 'mssql')
-  return ok
-end
-
-if mssql_exists() then
-  require("mssql").set_keymaps("<leader>d")
-end
