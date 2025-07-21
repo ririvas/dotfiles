@@ -5,8 +5,8 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.autoindent = true
 vim.opt.smartindent = true
-vim.opt.number = false
-vim.opt.relativenumber = false
+vim.opt.number = true
+vim.opt.relativenumber = true
 
 -- Plugin settings
 vim.g.db_ui_execute_on_save = 0
