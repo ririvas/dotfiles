@@ -36,6 +36,7 @@ return {
                 lspConfig[server].setup(config)
             end
             vim.lsp.config("roslyn", {
+                handlers = require("rzls.roslyn_handlers"),
                 cmd = {
                     "dotnet",
                     "/home/rrivas/.local/share/nvim/roslyn/Microsoft.CodeAnalysis.LanguageServer.dll",
@@ -51,14 +52,21 @@ return {
     -- TypeScript support
     {
         'pmizio/typescript-tools.nvim',
+        enabled = true,
         ft = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
         dependencies = {
             'nvim-lua/plenary.nvim',
         },
-        config = function()
-            require('typescript-tools').setup({
-            })
-        end,
+        opts = {
+            settings = {
+                tsserver_format_options = {
+                    baseIndentSize = 4,
+                    indentSize = 4,
+                    tabSize = 4,
+                    convertTabsToSpaces = true
+                }
+            }
+        }
     },
 
     'nvim-lua/plenary.nvim',

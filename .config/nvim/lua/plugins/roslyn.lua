@@ -2,6 +2,12 @@ return {
     {
         "seblj/roslyn.nvim",
         ft = "cs",
+        dependences = {
+            {
+                "tris203/rzls.nvim",
+                config = true
+            }
+        },
         opts = {
             filewatching = "roslyn",
             keymap_prefix = "<leader>r",
@@ -17,10 +23,27 @@ return {
                 }
             }
         },
+        init = function()
+            -- We add the Razor file types before the plugin loads.
+            vim.filetype.add({
+                extension = {
+                    razor = "razor",
+                    cshtml = "razor",
+                },
+            })
+        end
+    },
+    {
+        "tris203/rzls.nvim",
+        ft = "cshtml"
     },
     {
         "nvimtools/none-ls.nvim",
+        enabled = true,
         optional = true,
+        dependencies = {
+            'MunifTanjim/prettier.nvim'
+        },
         opts = function(_, opts)
             local nls = require("null-ls")
             opts.sources = opts.sources or {}
@@ -29,10 +52,14 @@ return {
     },
     {
         "stevearc/conform.nvim",
+        enabled = true,
         optional = true,
+        dependencies = {
+            'MunifTanjim/prettier.nvim'
+        },
         opts = {
             formatters_by_ft = {
-                cs = { "csharpier" },
+                cs = { "csharpier" }
             },
             formatters = {
                 csharpier = {
@@ -41,5 +68,5 @@ return {
                 },
             },
         },
-    },
+    }
 }
