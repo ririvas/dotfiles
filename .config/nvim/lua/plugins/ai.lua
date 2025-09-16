@@ -8,7 +8,6 @@ return {
       vim.g.copilot_enabled = 0
     end,
   },
-  
   -- Copilot Chat
   {
     'CopilotC-Nvim/CopilotChat.nvim',
@@ -20,6 +19,16 @@ return {
     dependencies = {
       "github/copilot.vim",
       "nvim-lua/plenary.nvim",
+      "folke/which-key.nvim",
+      "nvim-telescope/telescope.nvim"
+    },
+    opts = {
+        keymap_prefix = { "<leader>a", desc = "CopilotChat" }
+    },
+    keys = {
+        { "<leader>ao", function() require('CopilotChat').open() end, desc = "Open copilot chat"},
+        { "<leader>ac", function() require('CopilotChat').close() end, desc = "Close copilot chat"},
+        { "<leader>ar", function() require('CopilotChat').reset() end, desc = "Reset copilot chat"}
     },
     config = function()
       require('CopilotChat').setup({

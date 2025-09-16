@@ -7,6 +7,7 @@ return {
       'nvim-lua/plenary.nvim',
       'BurntSushi/ripgrep', -- better grep
       'isak102/telescope-git-file-history.nvim',
+      'nvim-telescope/telescope-ui-select.nvim',
     },
     keys = {
       { '<leader>ff', function() require('telescope.builtin').find_files() end, desc = 'Find Files' },
@@ -27,10 +28,12 @@ return {
         -- Extension configuration
         extensions = {}
       })
+      require('telescope').load_extension("ui-select")
     end
   },
   
   -- Telescope dependencies
+  'nvim-telescope/telescope-ui-select.nvim',
   'nvim-lua/plenary.nvim',
   'isak102/telescope-git-file-history.nvim',
   'tpope/vim-fugitive', -- Git integration
