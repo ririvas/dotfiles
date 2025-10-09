@@ -7,8 +7,7 @@ return {
     dependencies = {
       "OXY2DEV/markview.nvim"
     },
-    config = function()
-      require('nvim-treesitter.configs').setup({
+    opts = {
         ensure_installed = {
           'c', 'lua', 'vim', 'vimdoc', 'query',
           'javascript', 'typescript', 'html', 'css',
@@ -20,8 +19,7 @@ return {
         highlight = {
           enable = true,
         },
-      })
-    end
+      }
   },
   
   -- Markview (depends on Treesitter)

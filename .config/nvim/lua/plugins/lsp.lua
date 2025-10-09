@@ -1,7 +1,7 @@
 return {
     -- LSP Management
     {
-        'williamboman/mason.nvim',
+        'mason-org/mason.nvim',
         lazy = false,
         config = function()
             require('mason').setup({
@@ -9,9 +9,9 @@ return {
         end,
     },
     {
-        'williamboman/mason-lspconfig.nvim',
+        'mason-org/mason-lspconfig.nvim',
         lazy = false,
-        dependencies = { 'williamboman/mason.nvim' },
+        dependencies = { 'mason-org/mason.nvim' },
         config = function()
             require('mason-lspconfig').setup({
                 automatic_enable = false, -- setting this to true messes with roslyn?
@@ -23,7 +23,7 @@ return {
         'neovim/nvim-lspconfig',
         lazy = false,
         dependencies = {
-            'williamboman/mason-lspconfig.nvim'
+            'mason-org/mason-lspconfig.nvim'
         },
         config = function(_, opts)
             local lspConfig = require("lspconfig");
@@ -39,7 +39,7 @@ return {
                 handlers = require("rzls.roslyn_handlers"),
                 cmd = {
                     "dotnet",
-                    "/home/rrivas/.local/share/nvim/roslyn/Microsoft.CodeAnalysis.LanguageServer.dll",
+                    vim.fn.stdpath("data") .. "/roslyn/Microsoft.CodeAnalysis.LanguageServer.dll",
                     "--logLevel=Information",
                     "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()),
                     "--stdio",

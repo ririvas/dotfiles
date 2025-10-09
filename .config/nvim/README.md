@@ -4,6 +4,12 @@ Built with LazyVim.
 
 ## Plugins
 
+### Treesitter
+
+1. `npm install -g tree-sitter-cli` or through other means
+1. install stylua
+
+
 ### Roslyn
 
 We use seblyng/roslyn.nvim for c# lsp. However, this is just a plugin to interface with roslyn.
@@ -43,6 +49,3 @@ rm "./roslyn.zip"
 
 ```
 
-```
-
-```
