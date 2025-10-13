@@ -9,7 +9,6 @@ Built with LazyVim.
 1. `npm install -g tree-sitter-cli` or through other means
 1. install stylua
 
-
 ### Roslyn
 
 We use seblyng/roslyn.nvim for c# lsp. However, this is just a plugin to interface with roslyn.
@@ -17,6 +16,8 @@ Roslyn needs to be installed separately.
 
 The plugin page has a guide for installing roslyn via custom mason repositories or manually.
 The simplest method was to use the script in the custom mason repo, Crashdummyy/roslynLanguageServer.
+
+> Roslyn also needs the dotnet 9 sdk installed
 
 ```Bash
 #!/bin/bash
@@ -48,4 +49,3 @@ unzip "./roslyn.zip" -d "$targetDir/"
 rm "./roslyn.zip"
 
 ```
-
