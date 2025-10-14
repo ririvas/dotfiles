@@ -35,17 +35,6 @@ return {
                 config.capabilities = capabilities
                 lspConfig[server].setup(config)
             end
-            vim.lsp.config("roslyn", {
-                handlers = require("rzls.roslyn_handlers"),
-                cmd = {
-                    "dotnet",
-                    vim.fn.stdpath("data") .. "/roslyn/Microsoft.CodeAnalysis.LanguageServer.dll",
-                    "--logLevel=Information",
-                    "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()),
-                    "--stdio",
-                },
-                -- Add other options here
-            })
             vim.lsp.enable("pyright")
         end,
     },

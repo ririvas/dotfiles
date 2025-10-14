@@ -49,3 +49,7 @@ unzip "./roslyn.zip" -d "$targetDir/"
 rm "./roslyn.zip"
 
 ```
+
+### Rzls
+
+Like roslyn, install the language server from - <https://github.com/Crashdummyy/rzls>
