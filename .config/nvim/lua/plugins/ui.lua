@@ -1,19 +1,19 @@
 return {
   -- Icons
   {
-    'nvim-tree/nvim-web-devicons',
+    "nvim-tree/nvim-web-devicons",
     lazy = false,
     config = function()
       require("nvim-web-devicons").setup({ default = true })
-    end
+    end,
   },
-  
+
   -- File explorer
   {
-    'nvim-tree/nvim-tree.lua',
+    "nvim-tree/nvim-tree.lua",
     cmd = "NvimTreeToggle",
     config = function()
       require("nvim-tree").setup()
-    end
-  }
+    end,
+  },
 }
