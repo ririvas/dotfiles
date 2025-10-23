@@ -11,16 +11,16 @@ vim.opt.relativenumber = true
 -- Plugin settings
 vim.g.db_ui_execute_on_save = 0
 vim.g.copilot_enabled = 0
-vim.g.vimspector_enable_mappings = 'HUMAN'
+vim.g.vimspector_enable_mappings = "HUMAN"
 vim.g.mkdp_echo_preview_url = 1
 
 -- Lightline settings
 vim.g.lightline = {
-  colorscheme = 'one'
+  colorscheme = "one",
 }
 
 -- Theme settings
-vim.o.background = 'light'
+vim.o.background = "light"
 
 -- ripgrep
 vim.opt.grepprg = "rg --vimgrep"
@@ -32,3 +32,6 @@ vim.g.loaded_netrwPlugin = 1
 
 -- enable 24-bit color
 vim.opt.termguicolors = true
+
+-- key code delay
+vim.opt.ttimeoutlen = 10
