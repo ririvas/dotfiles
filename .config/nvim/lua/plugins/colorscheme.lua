@@ -1,38 +1,38 @@
 return {
   -- Colorscheme collection
   {
-    'catppuccin/nvim',
+    "catppuccin/nvim",
     name = "catppuccin",
     priority = 1000, -- Make sure to load this before all the other start plugins
     lazy = false,
   },
   {
-    'ellisonleao/gruvbox.nvim',
+    "ellisonleao/gruvbox.nvim",
     priority = 1000,
     lazy = false,
   },
   {
-    'folke/tokyonight.nvim',
+    "folke/tokyonight.nvim",
     priority = 1000,
     lazy = false,
   },
   {
-    'Mofiqul/vscode.nvim',
+    "Mofiqul/vscode.nvim",
     priority = 1000,
     lazy = false,
     config = function()
-      require('vscode').setup({
+      require("vscode").setup({
         -- Alternatively you can set style in setup
-        style = 'light'
+        -- style = 'light'
       })
-      
+
       -- Enable transparent background
-      require('vscode').load()
+      require("vscode").load()
     end,
   },
   {
-    'projekt0n/github-nvim-theme',
+    "projekt0n/github-nvim-theme",
     priority = 1000,
     lazy = false,
-  }
+  },
 }

@@ -69,4 +69,7 @@ return {
     "tris203/rzls.nvim",
     ft = "cshtml",
   },
+  {
+    "jlcrochet/vim-razor",
+  },
 }
