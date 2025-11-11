@@ -5,6 +5,7 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 export DOTNET_ROOT="/usr/share/dotnet"
 export PATH="$PATH:/opt/mssql-tools/bin"
 export PATH="$PATH:/usr/local/bin/netcoredbg"
+export PATH=$PATH:/usr/local/go/bin
 
 if [ -f $HOME/.bashrc ]; then
         source $HOME/.bashrc

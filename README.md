@@ -2,6 +2,9 @@
 
 ### Terminal Setup
 
+**GO**
+Follow online instructions
+
 **Starship** <https://starship.rs/> - better shell prompting
 
 ```bash
