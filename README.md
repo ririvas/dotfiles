@@ -21,4 +21,5 @@ cargo install eza
 
 ```bash
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+sudo apt install fzf
 ```
