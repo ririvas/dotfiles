@@ -50,7 +50,7 @@ return {
 		},
 		config = function()
 			require("CopilotChat").setup({
-				model = "claude-opus-4.5",
+				model = "claude-opus-4.7",
 			})
 		end,
 	},
