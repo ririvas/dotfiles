@@ -23,6 +23,9 @@ return {
 			"nvim-telescope/telescope.nvim",
 		},
 		opts = {
+			model = "claude-opus-4.8",
+			trusted_tools = true,
+			auto_insert_mode = true,
 			keymap_prefix = { "<leader>a", desc = "CopilotChat" },
 		},
 		keys = {
@@ -48,11 +51,6 @@ return {
 				desc = "Reset copilot chat",
 			},
 		},
-		config = function()
-			require("CopilotChat").setup({
-				model = "claude-opus-4.7",
-			})
-		end,
 	},
 
 	-- Code Companion
