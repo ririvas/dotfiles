@@ -9,5 +9,6 @@ apt install fzf
 apt install libclang-dev clang
 apt install golang
 apt install texlive dvipng
+apt install btop
 
 ln -s /usr/bin/python3 /usr/bin/python
